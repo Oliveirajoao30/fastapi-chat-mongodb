@@ -23,6 +23,12 @@ class Settings:
     # MongoDB
     MONGO_URL: str = os.getenv("MONGO_URL", "")
     MONGO_DB: str = os.getenv("MONGO_DB", "chatdb")
+
+    # Redis
+    REDIS_URL: str = os.getenv("REDIS_URL", "redis://localhost:6379")
+    REDIS_CACHE_TTL: int = 86400  # 24 horas
+    REDIS_RATE_LIMIT_MAX: int = 30  # mensagens
+    REDIS_RATE_LIMIT_WINDOW: int = 60  # segundos
     
     # API
     API_TITLE: str = "Chat API - FastAPI + MongoDB Atlas"

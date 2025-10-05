@@ -18,17 +18,24 @@ from .routes import messages, websocket
 async def lifespan(app: FastAPI):
     """
     Gerencia o ciclo de vida da aplicação.
-    Conecta ao MongoDB na inicialização e desconecta ao finalizar.
+    Conecta ao MongoDB e Redis na inicialização.
     """
     # Startup
     print("🚀 Iniciando aplicação...")
     settings.validate()
+    
+    # Conecta MongoDB
     await MongoDB.connect(settings.MONGO_URL, settings.MONGO_DB)
+    
+    # Conecta Redis
+    from .database.redis_connection import redis_manager
+    await redis_manager.connect(settings.REDIS_URL)
     
     yield  # Aplicação rodando
     
     # Shutdown
     print("🛑 Finalizando aplicação...")
+    await redis_manager.disconnect()
     await MongoDB.disconnect()
 
 
@@ -71,18 +78,33 @@ async def health_check():
     Verifica o status da aplicação.
     Útil para monitoramento e deploy.
     """
+    from .database.redis_connection import redis_manager
+    
+    # Testa MongoDB
     try:
-        # Tenta pingar o MongoDB
         db = MongoDB.get_database()
         await db.command("ping")
         mongo_status = "connected"
     except Exception as e:
         mongo_status = f"error: {str(e)}"
     
+    # Testa Redis
+    try:
+        await redis_manager.redis_client.ping()
+        redis_status = "connected"
+    except Exception as e:
+        redis_status = f"error: {str(e)}"
+    
+    # Status geral
+    all_connected = mongo_status == "connected" and redis_status == "connected"
+    
     return {
-        "status": "healthy" if mongo_status == "connected" else "degraded",
+        "status": "healthy" if all_connected else "degraded",
         "version": settings.API_VERSION,
-        "database": mongo_status
+        "services": {
+            "mongodb": mongo_status,
+            "redis": redis_status
+        }
     }
 
 

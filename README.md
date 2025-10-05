@@ -38,3 +38,28 @@ source .venv/bin/activate
 
 # Instalar dependências
 pip install -r requirements.txt
+
+## ✨ Novas Funcionalidades 
+
+- 🚀 **Redis Cache** - Últimas 50 mensagens em memória
+- 📡 **Pub/Sub** - Distribuição em tempo real
+- 👥 **Presença Online** - Veja quem está conectado
+- 🚦 **Rate Limiting** - Proteção contra spam
+- 🐳 **Docker Compose** - Tudo containerizado
+
+## 🎬 Vídeo Demonstrativo
+
+[Link do vídeo aqui]
+
+## 📦 Instalação Rápida
+
+### Opção 1: Docker Compose (Recomendado)
+```bash
+# Clone o repositório
+git clone [seu-repo]
+cd [pasta]
+
+# Rode com Docker
+docker-compose up --build
+
+# Acesse http://localhost:8000
