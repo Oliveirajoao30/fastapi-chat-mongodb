@@ -47,9 +47,6 @@ pip install -r requirements.txt
 - 🚦 **Rate Limiting** - Proteção contra spam
 - 🐳 **Docker Compose** - Tudo containerizado
 
-## 🎬 Vídeo Demonstrativo
-
-[Link do vídeo aqui]
 
 ## 📦 Instalação Rápida
 
